@@ -37,21 +37,14 @@ class TestMeTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "wait for spi return success")
         
-        spi.login(acc: "aki", pass: "qaz") { (data, response, error) in
+        spi.login(acc: "aki", pass: "qaz") { (result) in
             
-            if error != nil {
-                print("Error: \(error!.localizedDescription)")
+            if result == true {
                 expectation.fulfill()
-                return
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options:[])
-                XCTAssertEqual((json as! [String:String])["status"]!, "ok")
-            }
-            catch {
+            } else {
                 XCTAssert(false)
             }
-            expectation.fulfill()
+            
         }
         
          wait(for: [expectation], timeout: 10.0)
@@ -62,21 +55,13 @@ class TestMeTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "wait for spi return failed")
         
-        spi.login(acc: "aki", pass: "123") { (data, response, error) in
+        spi.login(acc: "aki", pass: "123") { (result) in
             
-            if error != nil {
-                print("Error: \(error!.localizedDescription)")
+            if result != true {
                 expectation.fulfill()
-                return
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options:[])
-                XCTAssertEqual((json as! [String:String])["status"]!, "failed")
-            }
-            catch {
+            } else {
                 XCTAssert(false)
             }
-            expectation.fulfill()
         }
         
         wait(for: [expectation], timeout: 10.0)

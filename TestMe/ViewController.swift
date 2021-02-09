@@ -22,28 +22,16 @@ class ViewController: UIViewController {
         //textAccount.text == "aki" &&  == "qaz"
         let spi = SPI()
         
-        spi.login(acc: textAccount.text!, pass: textPassword.text!) { (data, response, error) in
+        spi.login(acc: textAccount.text!, pass: textPassword.text!) { (result) in
             
-            if error != nil{
-                print(error!.localizedDescription)
-            }else{
-                if let urlContent = data{
-                    do{
-                        let jsonresult =   (try  JSONSerialization.jsonObject(with: urlContent, options: JSONSerialization.ReadingOptions.mutableContainers)) as! [String:Any]
-                       
-                        if jsonresult["status"] as! String == "ok" {
-                            self.performSegue(withIdentifier: "segueToHome", sender: self)
-                        }else{
-                            let alert = UIAlertController(title: "", message: "帳號密碼錯誤", preferredStyle: .alert)
-                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                        }
-                        
-                    }catch{
-                        print(error.localizedDescription)
-                    }
-                }
+            if result == true {
+                self.performSegue(withIdentifier: "segueToHome", sender: self)
+            } else {
+                let alert = UIAlertController(title: "", message: "帳號密碼錯誤", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
+            
         }
        
     }

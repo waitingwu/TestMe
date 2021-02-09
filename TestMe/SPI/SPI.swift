@@ -18,22 +18,14 @@ class SPI {
  
     var defaultSession : URLSession = URLSession.shared
     
-    func login(acc:String,pass:String, completion: @escaping (Data?, URLResponse?,
-        Error?)->Void ) {
+    func login(acc:String,pass:String, completion: @escaping (Bool?)-> Void ) {
         
-        print("\(spi_url)/login")
-        var request = URLRequest(url: URL(string: spi_url+"/login")!)
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
-        request.httpBody = "{\"acc\":\"\(acc)\",\"pass\":\"\(pass)\"}".data(using: .utf8)!
-        let task = defaultSession.dataTask(with: request, completionHandler: { (data, response,
-            error) in
-            DispatchQueue.main.async {
-                completion(data,response,error)
-            }
-            
-        })
-        task.resume()
+        sleep(3)
         
+        if acc == "aki" && pass == "qaz" {
+            completion(true)
+        } else {
+            completion(false)
+        }
     }
 }
